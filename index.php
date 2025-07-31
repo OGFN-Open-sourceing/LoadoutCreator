@@ -514,6 +514,7 @@
     .cpp-string { color: #ff61f6; }
     .cpp-number { color: #ffe066; }
     .cpp-operator { color: #ffb800; font-weight: bold; }
+
     /* --- Custom Number Inputs for Loadout Controls --- */
     .slot-controls {
       display: flex;
