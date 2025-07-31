@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated UI Components Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Animated Gradient Title */
+        .gradient-title {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #5f5b85, #9d8fef, #5f5b85, #9d8fef, #5f5b85);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: animatedgradient 6s linear infinite, fadeIn 1.3s ease-in-out;
+        }
+
+        /* Card Component */
+        .card {
+            background: rgba(25, 21, 44, 0.2);
+            border: 1px solid rgba(192, 184, 243, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(2px);
+            transition: all 0.3s ease;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        /* Button Styles */
+        .btn {
+            background: linear-gradient(135deg, #5f5b85, #9d8fef);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 143, 239, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Input Styles */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(58, 49, 83, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(157, 143, 239, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            padding-right: 16px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: text;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #9d8fef;
+            box-shadow: 0 0 0 3px rgba(157, 143, 239, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #666;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(40, 40, 40, 0.8);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #5f5b85, #9d8fef);
+            border-radius: 10px;
+            animation: progressFill 3s ease-in-out infinite;
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: rgba(40, 40, 40, 0.8);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(157, 143, 239, 0.3);
+        }
+
+        .toggle::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 19px;
+            height: 19px;
+            background: #9d8fef;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(157, 143, 239, 0.3);
+        }
+
+        .toggle.active {
+            background: linear-gradient(135deg, #5f5b85, #9d8fef);
+        }
+
+        .toggle.active::before {
+            transform: translateX(25px);
+        }
+
+        /* Notification Component */
+        .notification {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(157, 143, 239, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(157, 143, 239, 0.3);
+            border-top: 3px solid #9d8fef;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Pulse Animation for Special Elements */
+        .pulse-element {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Floating particles for extra effect */
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #b19cd9;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 8px #b19cd9, 0 0 0px #fff;
+            will-change: transform, box-shadow, opacity;
+            opacity: 1;
+            /* Instantly visible */
+        }
+        .debris {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #e6d5ff;
+            border-radius: 1px;
+            pointer-events: none;
+            will-change: transform, opacity;
+            opacity: 1;
+            box-shadow: 0 0 4px #b19cd9, 0 0 2px #fff;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Animations */
+        @keyframes animatedgradient {
+            0% { background-position: 200% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            50% { width: 75%; }
+            100% { width: 0%; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+<div id="background"></div>
+<div class="container">
+    <h1 class="gradient-title">UI Components Demo</h1>
+
+    <div class="grid">
+        <!-- Card 1: Form Elements -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Form Elements</h2>
+            <div class="input-group">
+                <label class="input-label">Username</label>
+                <input type="text" class="input-field" placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Email</label>
+                <input type="email" class="input-field" placeholder="your@email.com">
+            </div>
+            <button class="btn">Submit Form</button>
+            <button class="btn" style="background: linear-gradient(135deg, #ef5f5f, #ef9d8f);">Cancel</button>
+        </div>
+
+        <!-- Card 2: Progress & Loading -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Progress & Loading</h2>
+            <p>Upload Progress:</p>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="spinner"></div>
+            <button class="btn pulse-element">Pulsing Button</button>
+        </div>
+
+        <!-- Card 3: Interactive Elements -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Interactive Elements</h2>
+            <div class="toggle-container">
+                <span>Dark Mode</span>
+                <div class="toggle" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="toggle-container">
+                <span>Notifications</span>
+                <div class="toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+            <button class="btn" onclick="showNotification()">Show Notification</button>
+        </div>
+
+        <!-- Card 4: Information Display -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Status Messages</h2>
+            <div class="notification" style="border-color: rgba(76, 175, 80, 0.5);">
+                <div style="color: #4caf50;">✓ Success: Operation completed successfully!</div>
+            </div>
+            <div class="notification" style="border-color: rgba(255, 193, 7, 0.5);">
+                <div style="color: #ffc107;">⚠ Warning: Please review your settings.</div>
+            </div>
+            <div class="notification" style="border-color: rgba(244, 67, 54, 0.5);">
+                <div style="color: #f44336;">✗ Error: Something went wrong.</div>
+            </div>
+        </div>
+
+        <!-- Card 5: Data Display -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Statistics</h2>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #9d8fef;">42</div>
+                    <div style="color: #b0b0b0;">Active Users</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #9d8fef;">1.2k</div>
+                    <div style="color: #b0b0b0;">Total Views</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #9d8fef;">98%</div>
+                    <div style="color: #b0b0b0;">Uptime</div>
+                </div>
+            </div>
+            <button class="btn" style="width: 100%;">View Details</button>
+        </div>
+
+        <!-- Card 6: Advanced Controls -->
+        <div class="card">
+            <h2 style="margin-bottom: 1rem; color: #9d8fef;">Advanced Controls</h2>
+            <div class="input-group">
+                <label class="input-label">API Endpoint</label>
+                <input type="url" class="input-field" placeholder="https://api.example.com">
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn" style="flex: 1; min-width: 100px;">Connect</button>
+                <button class="btn" style="flex: 1; min-width: 100px; background: linear-gradient(135deg, #666, #999);">Disconnect</button>
+            </div>
+            <div class="toggle-container">
+                <span>Auto-sync</span>
+                <div class="toggle" onclick="toggleSwitch(this)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSwitch(element) {
+        element.classList.toggle('active');
+    }
+
+    function showNotification() {
+        const notifications = document.querySelectorAll('.notification');
+        const lastCard = notifications[notifications.length - 1].parentElement;
+
+        const newNotification = document.createElement('div');
+        newNotification.className = 'notification';
+        newNotification.innerHTML = '<div style="color: #9d8fef;">ℹ Info: New notification created!</div>';
+
+        lastCard.appendChild(newNotification);
+
+        setTimeout(() => {
+            newNotification.remove();
+        }, 3000);
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Add some interactive behavior
+    document.querySelectorAll('.input-field').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transform = 'scale(1.02)';
+        });
+
+        input.addEventListener('blur', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+
+    // Animate cards on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.card').forEach(card => {
+        observer.observe(card);
+    });
+
+    // Floating dots background effect with dynamic glow and "planet" physics (no explosion/debris)
+    (function() {
+        const background = document.getElementById('background');
+        const PARTICLE_MIN = 20;
+        const PARTICLE_MAX = 50;
+        const PARTICLE_COUNT = Math.floor(Math.random() * (PARTICLE_MAX - PARTICLE_MIN + 1)) + PARTICLE_MIN;
+        const PARTICLE_MIN_SPEED = 0.15;
+        const PARTICLE_MAX_SPEED = 0.35;
+        const PARTICLE_GLOW_MIN = 6;
+        const PARTICLE_GLOW_MAX = 18;
+        const PARTICLE_INTERACTION_RADIUS = 48;
+        const PARTICLE_FORCE = 0.012;
+        const PARTICLE_COLLISION_DIST = 5; // px, for bounce
+
+        let particles = [];
+
+        function randomBetween(a, b) {
+            return a + Math.random() * (b - a);
+        }
+
+        function createParticleObj(x, y) {
+            x = typeof x === "number" ? x : randomBetween(0, window.innerWidth);
+            y = typeof y === "number" ? y : randomBetween(0, window.innerHeight);
+            const angle = randomBetween(0, Math.PI * 2);
+            const speed = randomBetween(PARTICLE_MIN_SPEED, PARTICLE_MAX_SPEED);
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            const glow = randomBetween(PARTICLE_GLOW_MIN, PARTICLE_GLOW_MAX);
+            const phase = Math.random() * Math.PI * 2;
+            const el = document.createElement('div');
+            el.className = 'particle';
+            background.appendChild(el);
+            el.style.opacity = 1;
+            return { x, y, vx, vy, glow, phase, el };
+        }
+
+        function resetParticle(p) {
+            p.x = randomBetween(0, window.innerWidth);
+            p.y = randomBetween(0, window.innerHeight);
+            const angle = randomBetween(0, Math.PI * 2);
+            const speed = randomBetween(PARTICLE_MIN_SPEED, PARTICLE_MAX_SPEED);
+            p.vx = Math.cos(angle) * speed;
+            p.vy = Math.sin(angle) * speed;
+            p.glow = randomBetween(PARTICLE_GLOW_MIN, PARTICLE_GLOW_MAX);
+            p.phase = Math.random() * Math.PI * 2;
+            p.el.style.opacity = 1;
+        }
+
+        function animateParticles() {
+            // Physics: simple repulsion/attraction if close, and bounce on collision
+            for (let i = 0; i < particles.length; ++i) {
+                let p1 = particles[i];
+                for (let j = i + 1; j < particles.length; ++j) {
+                    let p2 = particles[j];
+                    let dx = p2.x - p1.x;
+                    let dy = p2.y - p1.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    // Only apply repulsion/attraction if not colliding
+                    if (dist < PARTICLE_INTERACTION_RADIUS && dist > PARTICLE_COLLISION_DIST) {
+                        let force = PARTICLE_FORCE * (1 - dist / PARTICLE_INTERACTION_RADIUS);
+                        let fx = force * dx / dist;
+                        let fy = force * dy / dist;
+                        if (dist < PARTICLE_INTERACTION_RADIUS * 0.5) {
+                            p1.vx -= fx;
+                            p1.vy -= fy;
+                            p2.vx += fx;
+                            p2.vy += fy;
+                        } else {
+                            p1.vx += fx * 0.2;
+                            p1.vy += fy * 0.2;
+                            p2.vx -= fx * 0.2;
+                            p2.vy -= fy * 0.2;
+                        }
+                    }
+
+                    // Collision: only if moving toward each other and not recently collided
+                    if (dist < PARTICLE_COLLISION_DIST && dist > 0.1) {
+                        // Check if moving toward each other
+                        let relVx = p2.vx - p1.vx;
+                        let relVy = p2.vy - p1.vy;
+                        let relDx = dx;
+                        let relDy = dy;
+                        let dot = relVx * relDx + relVy * relDy;
+                        if (dot < 0) {
+                            // Simple bounce: swap velocities
+                            let tempVx = p1.vx, tempVy = p1.vy;
+                            p1.vx = p2.vx;
+                            p1.vy = p2.vy;
+                            p2.vx = tempVx;
+                            p2.vy = tempVy;
+                            // Move them apart a bit to avoid repeated collision
+                            const push = (PARTICLE_COLLISION_DIST - dist) / 2 + 1;
+                            const nx = dx / dist, ny = dy / dist;
+                            p1.x -= nx * push;
+                            p1.y -= ny * push;
+                            p2.x += nx * push;
+                            p2.y += ny * push;
+                        }
+                    }
+                }
+            }
+
+            for (let p of particles) {
+                // Animate glow
+                let glowPulse = Math.sin(performance.now() / 400 + p.phase) * 0.5 + 0.5;
+                let glowSize = p.glow + glowPulse * 8;
+                let glowColor = `0 0 ${glowSize}px #b19cd9, 0 0 ${glowSize/2}px #fff`;
+
+                // Move
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce off edges
+                if (p.x < 0 || p.x > window.innerWidth) {
+                    p.vx *= -1;
+                    p.x = Math.max(0, Math.min(window.innerWidth, p.x));
+                }
+                if (p.y < 0 || p.y > window.innerHeight) {
+                    p.vy *= -1;
+                    p.y = Math.max(0, Math.min(window.innerHeight, p.y));
+                }
+
+                // Render
+                p.el.style.transform = `translate(${p.x}px,${p.y}px)`;
+                p.el.style.boxShadow = glowColor;
+                p.el.style.opacity = 1;
+            }
+
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        function resizeParticles() {
+            for (let p of particles) {
+                p.x = Math.max(0, Math.min(window.innerWidth, p.x));
+                p.y = Math.max(0, Math.min(window.innerHeight, p.y));
+            }
+        }
+
+        // Randomly distribute particles across the screen at initialization
+        for (let i = 0; i < PARTICLE_COUNT; ++i) {
+            particles.push(createParticleObj());
+        }
+        animateParticles();
+
+        window.addEventListener('resize', resizeParticles);
+    })();
+</script>
+</body>
+</html>

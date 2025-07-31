@@ -506,6 +506,7 @@
       box-shadow: 0 2px 8px #9d8fef11;
       letter-spacing: 0.01em;
     }
+
     /* --- C++ Syntax Highlighting Styles --- */
     .cpp-keyword { color: #9d8fef; font-weight: 700; }
     .cpp-type { color: #ffe066; font-weight: 700; }
